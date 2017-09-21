@@ -1,0 +1,28 @@
+{
+    "ports" : {
+        "of:0000000000000005/4" : {
+            "interfaces" : [
+                {
+                    "name" : "sw5-4",
+                    "ips"  : [ "192.168.6.1/30" ],
+                    "mac"  : "00:00:00:00:00:01"
+                }
+            ]
+        }
+    },
+    "apps" : {
+        "org.onosproject.router" : {
+            "bgp" : {
+                "bgpSpeakers" : [
+                    {
+                        "name" : "speaker1",
+                        "connectPoint" : "of:0000000000000001/7",
+                        "peers" : [
+                            "192.168.6.2"
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

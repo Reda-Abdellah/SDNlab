@@ -1,0 +1,89 @@
+ODL:
+
+echo nameserver 8.8.8.8 > /etc/resolv.conf
+ifconfig eth3 192.168.3.2 netmask 255.255.255.0
+ifconfig eth0 192.168.2.2 netmask 255.255.255.0
+ifconfig eth1 192.168.5.2 netmask 255.255.255.0
+ifconfig eth2 192.168.122.224 netmask 255.255.255.0
+route add default gw 192.168.122.1
+
+/opt/opendaylight/bin/karaf
+
+KARAF:
+
+
+
+feature:install odl-unimgr-dlux
+feature:install odl-dlux-core
+feature:install odl-dluxapps-applications
+feature:install odl-dluxapps-nodes
+feature:install odl-dluxapps-topology
+feature:install odl-dluxapps-yangui
+feature:install odl-dluxapps-yangman
+feature:install odl-dluxapps-yangvisualizer
+feature:install odl-dluxapps-yangutils
+feature:install odl-l2switch-switch-ui
+
+
+
+OVS:
+
+ifconfig eth0 192.168.5.1 netmask 255.255.255.0
+ovs-vsctl set-manager tcp:192.168.5.2:6640
+ovs-vsctl set bridge br0 protocols=OpenFlow13
+ovs-vsctl set-controller br0 tcp:192.168.5.2:6633
+ovs-vsctl set controller br0 connection-mode=out-of-band
+ovs-vsctl list controller
+
+
+host:
+ifconfig eth0 10.0.0.1 netmask 255.0.0.0
+
+
+
+****************************************************
+vi /etc/network/interfaces
+
+iface eth0 inet static
+        address 10.0.0.2
+        netmask 255.0.0.0
+        gateway 192.168.1.1
+
+*****************************************************
+## Configure eth0
+#
+# vi /etc/sysconfig/network-scripts/ifcfg-eth0
+
+DEVICE="eth0"
+IPADDR=192.168.2.2
+NETMASK=255.255.255.0
+NM_CONTROLLED="yes"
+ONBOOT=yes
+TYPE=Ethernet
+BOOTPROTO=static
+NAME="System eth0"
+HWADDR=A4:BA:DB:37:F1:04
+UUID=5fb06bd0-0bb0-7ffb-45f1-d6edd65f3e03
+
+
+
+## Configure Default Gateway
+#
+# vi /etc/sysconfig/network
+
+NETWORKING=yes
+HOSTNAME=centos6
+GATEWAY=192.168.2.2
+
+
+## Restart Network Interface
+#
+
+/etc/init.d/network restart
+
+## Configure DNS Server
+#
+# vi /etc/resolv.conf
+
+nameserver 8.8.8.8      # Replace with your nameserver ip
+nameserver 192.168.1.1  # Replace with your nameserver ip

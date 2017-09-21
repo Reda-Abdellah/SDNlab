@@ -1,0 +1,27 @@
+config t
+int f1/0 
+ip add 10.0.6.10 255.255.255.252
+no sh
+int f1/1 
+ip add 10.0.6.5 255.255.255.252
+no sh
+int loopback 1 
+ip add 10.1.6.5 255.255.255.255
+int loopback 2 
+ip add 10.2.6.5 255.255.255.255
+int loopback 3 
+ip add 10.3.6.5 255.255.255.255
+int loopback 4 
+ip add 10.4.6.5 255.255.255.255
+exit
+router bgp 5
+neighbor 10.0.6.6 remote-as 1
+neighbor 10.0.6.9 remote-as 2
+network 10.0.6.5 mask 255.255.255.252
+network 10.0.6.10 mask 255.255.255.252
+network 10.1.6.5 mask 255.255.255.255
+network 10.2.6.5 mask 255.255.255.255
+network 10.3.6.5 mask 255.255.255.255
+network 10.4.6.5 mask 255.255.255.255
+end 
+wr

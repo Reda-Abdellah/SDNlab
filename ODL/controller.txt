@@ -1,0 +1,30 @@
+
+
+ifconfig eth2 192.168.2.1 netmask 255.255.255.252
+ifconfig eth0 192.168.122.5 netmask 255.255.255.0
+ifconfig eth3 192.168.3.1 netmask 255.255.255.252
+ifconfig eth4 192.168.4.1 netmask 255.255.255.252
+ifconfig eth5 192.168.5.1 netmask 255.255.255.252
+ifconfig eth6 192.168.6.1 netmask 255.255.255.252
+echo nameserver 8.8.8.8 > /etc/resolv.conf
+route add default gw 192.168.122.1
+
+/opt/opendaylight/bin/karaf
+
+
+feature:install odl-unimgr-dlux
+feature:install odl-dlux-core
+feature:install odl-dluxapps-applications
+feature:install odl-dluxapps-nodes
+feature:install odl-dluxapps-topology
+feature:install odl-dluxapps-yangui
+feature:install odl-dluxapps-yangman
+feature:install odl-dluxapps-yangvisualizer
+feature:install odl-dluxapps-yangutils
+feature:install odl-l2switch-switch
+feature:install odl-mdsal-apidocs
+feature:install odl-l2switch-switch-ui
+feature:install odl-restconf 
+feature:install odl-bgpcep-bgp
+
+ENTRYPOINT ["./bin/onos-service"]

@@ -1,0 +1,22 @@
+system-view
+interface GigabitEthernet1/0
+ip address 192.168.5.2 30
+description LAN Site A
+interface GigabitEthernet2/0
+ip address 10.0.5.1 24
+quit
+
+
+
+
+system-view
+
+openflow instance 1
+
+#classification vlan 10
+
+controller 1 address ip 192.168.5.1
+
+active instance
+
+quit

@@ -1,0 +1,21 @@
+ifconfig eth0 192.168.3.2 netmask 255.255.255.0
+ovs-vsctl set-manager tcp:192.168.3.1:6640
+ovs-vsctl set bridge br0 protocols=OpenFlow13
+#ovs-vsctl set-controller br0 tcp:192.168.3.1:6653  #6633 forODL
+ovs-vsctl set controller br0 connection-mode=out-of-band
+route add default gw 192.168.3.1
+ovs-vsctl list controller
+echo nameserver 8.8.8.8 > /etc/resolv.conf
+
+****************************************************
+vi /etc/network/interfaces
+
+iface eth0 inet static
+        address 192.168.3.2
+        netmask 255.255.255.252
+        gateway 192.168.3.1
+
+*****************************************************
+ovs-vsctl list-br
+ovs-vsctl list-ports br0
+

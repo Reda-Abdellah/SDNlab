@@ -1,0 +1,43 @@
+
+cli:1
+
+sudo ssh controller@192.168.122.236
+
+sudo su
+rm -fr /opt/onos
+ifconfig enp0s9 192.168.2.1 netmask 255.255.255.252
+ifconfig enp0s10 192.168.3.1 netmask 255.255.255.0
+ifconfig enp0s16 192.168.4.1 netmask 255.255.255.252
+ifconfig enp0s17  192.168.5.1 netmask 255.255.255.252
+ifconfig enp0s18  192.168.6.1 netmask 255.255.255.252
+echo 1 > /proc/sys/net/ipv4/ip_forward
+/sbin/iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
+/sbin/iptables -A FORWARD -i enp0s9 -o enp0s3 -m state --state RELATED,ESTABLISHED -j ACCEPT
+/sbin/iptables -A FORWARD -i enp0s3 -o enp0s9 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+
+tar xvf onos-1.11.1.tar.gz 
+mv onos-1.11.1 /opt/onos
+cd /opt/onos/bin
+./onos-service 
+
+
+app activate org.onosproject.openflow
+app activate org.onosproject.ovsdb
+app activate org.onosproject.drivers.ovsdb
+app activate org.onosproject.fwd
+app activate org.onosproject.config
+app activate org.onosproject.proxyarp
+app activate org.onosproject.sdnip
+app activate org.onosproject.dhcp
+
+
+cli2:
+
+sudo ssh controller@192.168.122.236
+
+cd /opt/onos/bin/
+./onos-netcfg 127.0.0.1 ~/network-cfg.json
+./onos-netcfg 127.0.0.1 ~/office-dhcp.json
+echo  bgpPort=179 > /opt/onos/apache-karaf-3.0.8/etc/org.onosproject.routing.bgp.BgpSessionManager.cfg
+
